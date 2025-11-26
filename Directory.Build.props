@@ -1,0 +1,31 @@
+<Project>
+  <Sdk Name="ViHo.PackAsAnalyzer" Version="1.0.1" />
+
+  <PropertyGroup>
+    <AnalysisMode>All</AnalysisMode>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <DebugType>portable</DebugType>
+    <DefaultClassLibFrameworks>net9.0;net10.0</DefaultClassLibFrameworks>
+    <Deterministic>true</Deterministic>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <UseArtifactsOutput>true</UseArtifactsOutput>
+    <NoWarn>$(NoWarn);CA1515</NoWarn>
+  </PropertyGroup>
+  
+  <PropertyGroup Label="Package Items">
+    <Authors>Hugo Woodiwiss</Authors>
+    <Copyright>Copyright (c) Hugo Woodiwiss 2023-$([System.DateTime]::Now.ToString(yyyy))</Copyright>
+    <Description>TODO</Description>
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/hwoodiwiss/HwoodiwissApplication</PackageProjectUrl>
+    <PackageReleaseNotes>$(PackageProjectUrl)/releases</PackageReleaseNotes>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+</Project>

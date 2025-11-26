@@ -1,0 +1,133 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: [v*]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
+  NUGET_XMLDOC_MODE: skip
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            6.0.x
+            8.0.x
+          global-json-file: ./global.json
+
+      - name: Run Build Script
+        shell: pwsh
+        run: ./build.ps1
+        
+      - name: Validate Packages
+        shell: pwsh
+        run: | 
+          dotnet tool restore
+          $packages = Get-ChildItem -Path ./artifacts/package/release -Filter *.nupkg -Recurse
+          foreach ($package in $packages) {
+              $result = dotnet validate package local $package.FullName
+              if ($LASTEXITCODE -ne 0) {
+                  Write-Error "Package validation failed for $($package.FullName)"
+                  Foreach($line in $result) {
+                      Write-Error $line
+                  }
+                  return $LASTEXITCODE
+              }
+          }
+
+      - name: Publish Workflow Artifacts
+        uses: actions/upload-artifact@v5
+        with:
+          name: packages
+          path: ./artifacts/package/release
+
+  build-aot:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v5
+
+      - name: Publish Example AOT
+        run: dotnet publish .\examples\ExampleMinimalApi\ExampleMinimalApi.csproj -r win-x64 -c Release --framework net8.0 /tl
+
+      - name: Publish AOT Compiled Example
+        uses: actions/upload-artifact@v5
+        with:
+          name: ExampleMinimalApi-AOT
+          path: ./artifacts/bin/ExampleMinimalApi/release_net8.0_win-x64/native
+
+  publish-github:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      packages: write
+    if: |
+      github.event.repository.fork == false &&
+      (github.ref == format('refs/heads/{0}', github.event.repository.default_branch) ||
+      startsWith(github.ref, 'refs/tags/v'))
+    steps:
+      - name: Download packages
+        uses: actions/download-artifact@v5
+        with:
+          name: packages
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v5
+
+      - name: Publish Preview to Github Feed
+        run: dotnet nuget push *.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate --no-symbols --source https://nuget.pkg.github.com/hwoodiwiss/index.json
+
+  publish-nuget:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      id-token: write
+    environment:
+      name: NuGet.org
+      url: https://www.nuget.org/profiles/hwoodiwiss
+    if: |
+      github.event.repository.fork == false &&
+      startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Download packages
+        uses: actions/download-artifact@v5
+        with:
+          name: packages
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v5
+
+      - name: NuGet log in
+        uses: NuGet/login@v1
+        id: nuget-login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Push NuGet packages to NuGet.org
+        env:
+          API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+        run: dotnet nuget push "*.nupkg" --api-key "${API_KEY}" --skip-duplicate --source https://api.nuget.org/v3/index.json

@@ -1,0 +1,14 @@
+<Project>
+  <Target Name="AddGitMetadata" BeforeTargets="GetAssemblyAttributes" >
+    <Exec Command="git rev-parse HEAD" ConsoleToMSBuild="true" StandardOutputImportance="low" IgnoreExitCode="true" WorkingDirectory="$(MSBuildThisFileDirectory)" Condition=" '$(GitCommit)' == '' ">
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitCommit" />
+    </Exec>
+    <Exec Command="git rev-parse --abbrev-ref HEAD" ConsoleToMSBuild="true" StandardOutputImportance="low" IgnoreExitCode="true" WorkingDirectory="$(MSBuildThisFileDirectory)" Condition=" '$(GitBranch)' == '' ">
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitBranch" />
+    </Exec>
+    <ItemGroup>
+      <AssemblyMetadata Include="GitCommit" Value="$(GitCommit)" Condition=" $(GitCommit) != '' " />
+      <AssemblyMetadata Include="GitBranch" Value="$(GitBranch)" Condition=" $(GitBranch) != '' " />
+    </ItemGroup>
+  </Target>
+</Project>
