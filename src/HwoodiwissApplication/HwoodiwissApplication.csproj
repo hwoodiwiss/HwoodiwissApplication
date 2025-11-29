@@ -3,9 +3,11 @@
     <TargetFrameworks>$(DefaultClassLibFrameworks)</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Hwoodiwiss.Extensions.Hosting</RootNamespace>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ArgumentativeFilters" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Microsoft.Extensions.Telemetry" />
     <PackageReference Include="OpenTelemetry" />
     <PackageReference Include="OpenTelemetry.Exporter.Console" />

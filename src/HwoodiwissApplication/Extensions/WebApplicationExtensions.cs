@@ -9,14 +9,27 @@ namespace Hwoodiwiss.Extensions.Hosting.Extensions;
 
 internal static class WebApplicationExtensions
 {
-    public static WebApplication ConfigureRequestPipeline(this WebApplication app)
+    public static WebApplication ConfigureRequestPipeline(this WebApplication app, HwoodiwissApplicationOptions applicationOptions)
     {
         app.UseMiddleware<UserAgentBlockMiddleware>();
         app.UseDefaultFiles();
 
+        app.MapOpenApi();
+
         app.UseHttpLogging();
         app.MapEndpoints(app.Environment);
 
+
+        if (applicationOptions.HostStaticAssets)
+        {
+            app.ConfigureStaticAssets();
+        }
+
+        return app;
+    }
+
+    private static WebApplication ConfigureStaticAssets(this WebApplication app)
+    {
         if (app.Environment.IsDevelopment())
         {
             app.UseStaticFiles();

@@ -14,6 +14,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <UseArtifactsOutput>true</UseArtifactsOutput>
     <NoWarn>$(NoWarn);CA1515</NoWarn>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);NU5104</WarningsNotAsErrors>
   </PropertyGroup>
   
   <PropertyGroup Label="Package Items">
@@ -28,4 +29,9 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
+
+  <ItemGroup Condition=" '$(IsPackable)' == 'true'">
+    <None Include="$(MSBuildThisFileDirectory)\README.md" Pack="true" PackagePath="\"/>
+    <None Include="$(MSBuildThisFileDirectory)\LICENSE" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 </Project>

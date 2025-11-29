@@ -1,0 +1,9 @@
+@HwoodiwissTestApplication_HostAddress = http://localhost:5090
+
+### Weather Forecast Endpoint
+GET {{HwoodiwissTestApplication_HostAddress}}/weatherforecast/
+Accept: application/json
+
+### OpenAPI Specification
+GET {{HwoodiwissTestApplication_HostAddress}}/openapi/v1.json
+Accept: application/json
