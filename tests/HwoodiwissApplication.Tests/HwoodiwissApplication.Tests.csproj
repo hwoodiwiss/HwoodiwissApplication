@@ -9,9 +9,11 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\HwoodiwissApplication\HwoodiwissApplication.csproj" />
+    <ProjectReference Include="..\HwoodiwissTestApplication\HwoodiwissTestApplication.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="TUnit" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
   </ItemGroup>
   <PropertyGroup>
     <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>

@@ -16,7 +16,7 @@ public sealed partial class HwoodiwissApplicationBuilder
 
     public HwoodiwissApplicationBuilder(string[] args)
     {
-        _webApplicationBuilder = WebApplication.CreateBuilder(args);
+        _webApplicationBuilder = WebApplication.CreateSlimBuilder(args);
         _loggerFactory = LoggerFactory.Create(builder => builder.ConfigureLogging(null, true));
         _startupLogger = _loggerFactory.CreateLogger<HwoodiwissApplicationBuilder>();
     }
@@ -34,7 +34,7 @@ public sealed partial class HwoodiwissApplicationBuilder
         return this;
     }
 
-    public HwoodiwissApplicationBuilder WithJsonContexts(params JsonSerializerContext[] jsonTypeInfoResolvers)
+    public HwoodiwissApplicationBuilder WithHttpJsonContexts(params JsonSerializerContext[] jsonTypeInfoResolvers)
     {
         ArgumentNullException.ThrowIfNull(jsonTypeInfoResolvers);
 

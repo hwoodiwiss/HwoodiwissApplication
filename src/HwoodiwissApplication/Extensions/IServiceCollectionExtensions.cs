@@ -91,6 +91,8 @@ internal static class IServiceCollectionExtensions
             options.RequestHeaders.Add("X-Real-IP");
         });
 
+        services.AddOpenApi();
+
         return services;
     }
 }
