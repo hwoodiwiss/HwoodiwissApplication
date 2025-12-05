@@ -34,7 +34,10 @@ internal static class IServiceCollectionExtensions
                     ApplicationMetadata.ApplicationName,
                     ApplicationMetadata.Version));
             });
+
+            builder.AddStandardResilienceHandler();
         });
+
         services.AddHttpClient();
 
         return services;
