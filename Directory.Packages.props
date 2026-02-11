@@ -10,7 +10,7 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.15.0" />
     <PackageVersion Include="OpenTelemetry.Resources.Container" Version="1.14.0-beta.1" />
     <PackageVersion Include="OpenTelemetry.Resources.Host" Version="1.14.0-beta.1" />
-    <PackageVersion Include="TUnit" Version="1.13.11" />
+    <PackageVersion Include="TUnit" Version="1.13.40" />
   </ItemGroup>
   <ItemGroup Label="TFM Aligned Packages (net9.0)" Condition="'$(TargetFramework)' == 'net9.0'">
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.12" />
