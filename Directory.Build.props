@@ -30,7 +30,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionPrefix Condition=" '$(GITHUB_REF_TYPE)' == 'tag' ">$([System.String]::Copy($(GITHUB_REF_NAME)).TrimStart('v'))</VersionPrefix>
+    <VersionPrefix Condition=" '$(VersionPrefix)' == '' ">1.0.0</VersionPrefix>
     <VersionSuffix Condition=" '$(GITHUB_HEAD_REF)' != '' ">pr$(GITHUB_REF_NAME.Split('/')[0]).$(GITHUB_RUN_NUMBER)</VersionSuffix>
   </PropertyGroup>
 
