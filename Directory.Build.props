@@ -1,6 +1,4 @@
 <Project>
-  <Sdk Name="ViHo.PackAsAnalyzer" Version="1.0.1" />
-
   <PropertyGroup>
     <AnalysisMode>All</AnalysisMode>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
@@ -14,6 +12,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <UseArtifactsOutput>true</UseArtifactsOutput>
     <NoWarn>$(NoWarn);CA1515</NoWarn>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <WarningsNotAsErrors>$(WarningsNotAsErrors);NU5104</WarningsNotAsErrors>
   </PropertyGroup>
   
@@ -28,6 +27,12 @@
     <PackageReleaseNotes>$(PackageProjectUrl)/releases</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionPrefix Condition=" '$(GITHUB_REF_TYPE)' == 'tag' ">$([System.String]::Copy($(GITHUB_REF_NAME)).TrimStart('v'))</VersionPrefix>
+    <VersionPrefix Condition=" '$(VersionPrefix)' == '' ">1.0.0</VersionPrefix>
+    <VersionSuffix Condition=" '$(GITHUB_HEAD_REF)' != '' ">pr$(GITHUB_REF_NAME.Split('/')[0]).$(GITHUB_RUN_NUMBER)</VersionSuffix>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(IsPackable)' == 'true'">

@@ -20,6 +20,7 @@ internal static class ILoggingBuilderExtensions
         builder.AddOpenTelemetry(opt =>
             {
                 opt.IncludeScopes = true;
+                opt.IncludeFormattedMessage = true;
                 opt.AddOtlpExporter();
             });
 

@@ -8,7 +8,7 @@ namespace Hwoodiwiss.Extensions.Hosting.Extensions;
 
 internal static class TelemetryExtensions
 {
-    public static IServiceCollection AddTelemetry(this IServiceCollection services)
+    public static IServiceCollection AddTelemetry(this IServiceCollection services, ApplicationConfiguration applicationConfiguration)
     {
         services.AddOpenTelemetry()
             .ConfigureResource(TelemetryResourceBuilder)
@@ -21,12 +21,16 @@ internal static class TelemetryExtensions
                     .AddMeter("Microsoft.AspNetCore.Server.Kestrel")
                     .AddMeter("Microsoft.AspNetCore.Diagnostics")
                     .AddOtlpExporter();
+
+                applicationConfiguration.ConfigureMetrics?.Invoke(metrics);
             })
             .WithTracing(tracing =>
             {
                 tracing.AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddOtlpExporter();
+
+                applicationConfiguration.ConfigureTracing?.Invoke(tracing);
             });
 
         static void TelemetryResourceBuilder(ResourceBuilder resourceBuilder)
