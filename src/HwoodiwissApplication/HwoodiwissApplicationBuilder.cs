@@ -96,10 +96,9 @@ public sealed partial class HwoodiwissApplicationBuilder : IHostApplicationBuild
         }
     }
 
-    public void ConfigureContainer<TContainerBuilder>(IServiceProviderFactory<TContainerBuilder> factory, Action<TContainerBuilder>? configure = null) where TContainerBuilder : notnull
-    {
-        throw new NotImplementedException();
-    }
+    void IHostApplicationBuilder.ConfigureContainer<TContainerBuilder>(IServiceProviderFactory<TContainerBuilder> factory, Action<TContainerBuilder>? configure) =>
+        ((IHostApplicationBuilder)_webApplicationBuilder).ConfigureContainer(factory, configure);
+
 
     private static partial class Log
     {

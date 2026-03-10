@@ -82,7 +82,7 @@ internal static class IServiceCollectionExtensions
             return loggerFactory.CreateLogger(key is string keyString ? keyString : "Unknown");
         });
 
-        services.AddTelemetry();
+        services.AddTelemetry(applicationOptions);
 
         services.AddMemoryCache();
         services.AddSingleton(configurationRoot);
