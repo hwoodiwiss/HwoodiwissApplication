@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Hwoodiwiss.Extensions.Hosting.Extensions;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Routing;
@@ -26,6 +27,8 @@ public sealed class HwoodiwissApplication : IHost, IApplicationBuilder, IEndpoin
     public IDictionary<string, object?> Properties => ((IApplicationBuilder)_webApplication).Properties;
 
     public IServiceProvider Services => _webApplication.Services;
+
+    public IWebHostEnvironment Environment => _webApplication.Environment;
 
     public IServiceProvider ServiceProvider => ((IEndpointRouteBuilder)_webApplication).ServiceProvider;
 
