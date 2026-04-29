@@ -17,8 +17,11 @@ internal static class WebApplicationExtensions
         app.MapOpenApi();
 
         app.UseHttpLogging();
-        app.MapEndpoints(app.Environment);
 
+        if (!applicationOptions.DisableDefaultEndpoints)
+        {
+            app.MapEndpoints(app.Environment);
+        }
 
         if (applicationOptions.HostStaticAssets)
         {
