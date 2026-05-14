@@ -17,15 +17,16 @@ env:
   TERM: xterm
 
 jobs:
-  benchmark:
-    runs-on: ubuntu-24.04-arm
+  parse-and-start:
+    runs-on: ubuntu-latest
     if: |
       github.event.repository.fork == false &&
       github.event.issue.pull_request != '' &&
       startsWith(github.event.comment.body, '/benchmark')
+    outputs:
+      commit-sha: ${{ steps.parse.outputs.commit-sha }}
     permissions:
       contents: read
-      packages: read
       pull-requests: write
       statuses: write
 
@@ -62,10 +63,17 @@ jobs:
               description: "Benchmark run in progress...",
             });
 
+  benchmark:
+    runs-on: ubuntu-24.04-arm
+    needs: parse-and-start
+    permissions:
+      contents: read
+      packages: read
+    steps:
       - name: Checkout code
         uses: actions/checkout@v6
         with:
-          ref: ${{ steps.parse.outputs.commit-sha }}
+          ref: ${{ needs.parse-and-start.outputs.commit-sha }}
           persist-credentials: false
 
       - name: Setup .NET SDK
@@ -87,15 +95,25 @@ jobs:
           name: benchmarks
           path: ./artifacts/bin/HwoodiwissApplication.Benchmarks/release/BenchmarkDotNet.Artifacts/**
 
+  post-result:
+    runs-on: ubuntu-latest
+    needs:
+      - parse-and-start
+      - benchmark
+    if: always() && needs.parse-and-start.result == 'success'
+    permissions:
+      contents: read
+      pull-requests: write
+      statuses: write
+    steps:
       - name: Post result
-        if: always()
         uses: actions/github-script@v9
         with:
           script: |
             const { owner, repo } = context.repo;
             const issueNumber = context.payload.issue.number;
-            const sha = "${{ steps.parse.outputs.commit-sha }}";
-            const success = "${{ job.status }}" === "success";
+            const sha = "${{ needs.parse-and-start.outputs.commit-sha }}";
+            const success = "${{ needs.benchmark.result }}" === "success";
 
             await github.rest.issues.createComment({
               owner, repo, issue_number: issueNumber,

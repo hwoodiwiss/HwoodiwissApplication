@@ -28,14 +28,23 @@ public class HwoodiwissApplicationBenchmarks
     }
 
     [Benchmark]
-    public async Task<HttpResponseMessage> Health()
-        => await _client.GetAsync(HealthPath).ConfigureAwait(false);
+    public async Task<int> Health()
+    {
+        using var response = await _client.GetAsync(HealthPath).ConfigureAwait(false);
+        return (int)response.StatusCode;
+    }
 
     [Benchmark]
-    public async Task<HttpResponseMessage> Configuration()
-        => await _client.GetAsync(ConfigurationPath).ConfigureAwait(false);
+    public async Task<int> Configuration()
+    {
+        using var response = await _client.GetAsync(ConfigurationPath).ConfigureAwait(false);
+        return (int)response.StatusCode;
+    }
 
     [Benchmark]
-    public async Task<HttpResponseMessage> WeatherForecast()
-        => await _client.GetAsync(WeatherForecastPath).ConfigureAwait(false);
+    public async Task<int> WeatherForecast()
+    {
+        using var response = await _client.GetAsync(WeatherForecastPath).ConfigureAwait(false);
+        return (int)response.StatusCode;
+    }
 }
