@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <TargetFrameworks>$(DefaultClassLibFrameworks)</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <RootNamespace>HwoodiwissApplication.Benchmarks</RootNamespace>
     <NoWarn>$(NoWarn);CA1707;CA1711;CA1001</NoWarn>
