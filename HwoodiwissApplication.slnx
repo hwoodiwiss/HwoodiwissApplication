@@ -16,4 +16,7 @@
     <Project Path="tests/HwoodiwissApplication.Tests/HwoodiwissApplication.Tests.csproj" />
     <Project Path="tests/HwoodiwissTestApplication/HwoodiwissTestApplication.csproj" />
   </Folder>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/HwoodiwissApplication.Benchmarks/HwoodiwissApplication.Benchmarks.csproj" />
+  </Folder>
 </Solution>
