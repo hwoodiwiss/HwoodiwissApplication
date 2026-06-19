@@ -71,7 +71,7 @@ jobs:
       packages: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ needs.parse-and-start.outputs.commit-sha }}
           persist-credentials: false
