@@ -4,7 +4,7 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <DebugType>portable</DebugType>
-    <DefaultClassLibFrameworks>net9.0;net10.0</DefaultClassLibFrameworks>
+    <DefaultClassLibFrameworks>net9.0;net10.0;net11.0;</DefaultClassLibFrameworks>
     <Deterministic>true</Deterministic>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
